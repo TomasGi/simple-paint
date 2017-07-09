@@ -1,0 +1,35 @@
+html, body {
+    margin: 0;
+}
+.element{
+    display: block;
+}
+.container-menu {
+    float: left;
+    width: 500px;
+    margin: 0 auto;
+    h1{
+        text-align: center;
+    }
+    label{
+        font-size: 50px;
+        margin-left: 10px;
+    }
+    a{
+        color: blue;
+        cursor: pointer;
+        font-size: 50px;
+        margin-left: 10px;
+    }
+}
+
+.container-draw {
+    width: 800px;
+    height: 600px;
+    margin: 20px 20px;
+    float: right;
+    #draw {
+        border: 1px solid #000;
+        cursor: url(../img/cursor.png), auto;
+    }
+}

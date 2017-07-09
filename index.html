@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Paint</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body>
+  <div class="element container-menu">
+    <h1>Welcome To Paint</h1>
+    <div class="controls">
+      <label for="brush-size">Brush size:</label>
+      <input id="brush-size" type="range" name="brush-size" min="1" max="200" value="20" data-sizing="px">
+      <label for="brush-color">Brush Color</label>
+      <input id="brush-color" type="color" name="brush-color" value="#cacaca"> <br>
+      <label for="clear-canvas-button">Clear canvas</label>
+      <button type="button" id="clear-canvas-button">Clear</button> 
+      <label for="rainbow-effect">Rainbow effect</label>
+      <input id="rainbow-effect" type="checkbox" name="rainbow-effect"> <br>
+      <label for="pulse-effect">Pulse effect</label>
+      <input id="pulse-effect" type="checkbox" name="pulse-effect"><br>
+      <a id="downloadLnk" download="YourFileName.jpg">Download as image</a>
+
+    </div>
+  </div>
+  <div class="element container-draw">
+    <canvas id="draw" width="800" height="600"></canvas>
+      <script>
+        const canvas = document.querySelector('#draw')
+        const ctx = canvas.getContext('2d')
+        // canvas.width = window.innerWidth
+        // canvas.height = window.innerHeight
+        var brushColor = '#cacaca'
+        var saveColor = ''
+        var brushSize = '20'
+        var canvasBackground = '#ffffff'
+        var clearCanvas = document.getElementById('clear-canvas-button')
+        ctx.strokeStyle = brushColor
+        ctx.lineJoin = 'round'
+        ctx.lineCap = 'round'
+        ctx.lineWidth = brushSize
+        ctx.fillStyle = canvasBackground
+        // ctx.globalCompositeOperation = 'multiply'
+
+        let isDrawing = false
+        let lastX = 0
+        let lastY = 0
+        let hue = 0
+        let direction = true
+        const inputBrush = document.getElementById('brush-size')
+        const inputColor = document.getElementById('brush-color')
+        const downloadLnk = document.getElementById('downloadLnk')
+
+        function handleUpdateBrush () {
+          brushSize = (this.value)
+          console.log('Brush size ' + brushSize)
+        }
+
+        function handleUpdateColor () {
+          brushColor = (this.value)
+          saveColor = brushColor
+          console.log('Brush color ' + brushColor)
+        }
+
+        inputBrush.addEventListener('change', handleUpdateBrush)
+        inputBrush.addEventListener('mousemove', handleUpdateBrush)
+
+        brushColor = saveColor
+        inputColor.addEventListener('change', handleUpdateColor)
+        inputColor.addEventListener('mousemove', handleUpdateColor)
+
+        function download () {
+          var dt = canvas.toDataURL('image/jpeg')
+          this.href = dt
+        };
+        downloadLnk.addEventListener('click', download, false)
+
+        clearCanvas.addEventListener('click', function () {
+          console.log('Clearing canvas!')
+          if (confirm('Do you want to clear?') === true) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+          }
+        })
+
+        function draw (e) {
+          if (!isDrawing) return // does not draw if not mouseDown
+
+          console.log(e)
+          ctx.strokeStyle = brushColor // rainbow: `hsl(${hue}, 100%, 50%)`
+          ctx.lineWidth = brushSize
+          ctx.beginPath()
+          ctx.moveTo(lastX, lastY)
+          ctx.lineTo(e.offsetX, e.offsetY)
+          ctx.stroke()
+          // [lastX, lastY] = [e.offsetX, e.offsetY] // ES6
+          lastX = e.offsetX
+          lastY = e.offsetY
+
+          if (document.getElementById('rainbow-effect').checked) {
+            hue++
+            brushColor = `hsl(${hue}, 100%, 50%)`
+            if (hue >= 360) {
+              hue = 0
+            }
+          }
+
+          if (document.getElementById('pulse-effect').checked) {
+            if (brushSize >= 200 || brushSize <= 1) {
+              direction = !direction
+            }
+            if (direction) {
+              brushSize++
+            } else {
+              brushSize--
+            }
+          }
+
+          // if (ctx.lineWidth >= 200 || ctx.lineWidth <= 1) {
+          //   direction = !direction
+          // }
+          // if (direction) {
+          //   ctx.lineWidth++
+          // } else {
+          //   ctx.lineWidth--
+          // }
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+          isDrawing = true
+          lastX = e.offsetX
+          lastY = e.offsetY
+        })
+        
+        canvas.addEventListener('mousemove', draw)
+        canvas.addEventListener('mouseup', () => isDrawing = false)
+        canvas.addEventListener('mouseout', () => isDrawing = false)
+      </script>
+  </div>
+</body>
+</html>

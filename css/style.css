@@ -1,0 +1,31 @@
+html, body {
+  margin: 0; }
+
+.element {
+  display: block; }
+
+.container-menu {
+  float: left;
+  width: 500px;
+  margin: 0 auto; }
+  .container-menu h1 {
+    text-align: center; }
+  .container-menu label {
+    font-size: 50px;
+    margin-left: 10px; }
+  .container-menu a {
+    color: blue;
+    cursor: pointer;
+    font-size: 50px;
+    margin-left: 10px; }
+
+.container-draw {
+  width: 800px;
+  height: 600px;
+  margin: 20px 20px;
+  float: right; }
+  .container-draw #draw {
+    border: 1px solid #000;
+    cursor: url(../img/cursor.png), auto; }
+
+/*# sourceMappingURL=style.css.map */
